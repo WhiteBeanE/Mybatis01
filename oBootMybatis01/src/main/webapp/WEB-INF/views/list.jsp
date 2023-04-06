@@ -10,9 +10,19 @@
 <body>
 	<h1>회원 관리</h1>
 	<a href="writeFormEmp">writeFormEmp 입력</a>
+	<a href="writeFormEmp3">writeFormEmp Valid 입력</a>
 	<h3>사원 수 : ${totalEmp}</h3>
 	<p>uptCnt 수정시 전달 Message : ${updateCount}</p>
 	<p>Message 수정시 전달 Message : ${Message}</p>
+	
+	<form action="listSearch3">
+		<select name="search">
+			<option value="s_job">업무 조회</option>
+			<option value="s_ename">이름 조회</option>
+		</select>
+		<input type="text" name="keyword" placeholder="keyword를 입력해주세요" value="${emp.keyword}">
+		<button type="submit">Keyword 검색</button>
+	</form>
 	
 	<c:set var="num" value="${page.total - page.start + 1}"></c:set>
 	

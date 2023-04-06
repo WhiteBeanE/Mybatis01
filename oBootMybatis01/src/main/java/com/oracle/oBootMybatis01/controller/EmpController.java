@@ -2,12 +2,17 @@ package com.oracle.oBootMybatis01.controller;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.oracle.oBootMybatis01.model.Dept;
 import com.oracle.oBootMybatis01.model.Emp;
 import com.oracle.oBootMybatis01.service.EmpService;
 import com.oracle.oBootMybatis01.service.Paging;
@@ -32,7 +37,7 @@ public class EmpController {
 		// Parameter emp -> Page만 추가 Setting
 		emp.setStart(page.getStart());
 		emp.setEnd(page.getEnd());
-		
+		System.out.println("EmpController.empList currentPage -> " + currentPage);
 		List<Emp> listEmp = empService.listEmp(emp);
 		System.out.println("EmpController.empList list listEmp.size() -> " + listEmp.size());
 		
@@ -101,7 +106,99 @@ public class EmpController {
 		// 관리자 사번 만 Get
 		List<Emp> empList = empService.listManager();
 		System.out.println("EmpController.updateEmp empList.size() -> " + empList.size());
-		model.addAttribute("empList", empList);
+		model.addAttribute("empMngList", empList);
+		
+		// 부서(코드, 부서명)
+		List<Dept> deptList = empService.deptSelect();
+		model.addAttribute("deptList", deptList);
+		System.out.println("EmpController.updateEmp deptList.size() -> " + deptList.size());
+		
 		return "writeFromEmp";
+	}
+	
+	@PostMapping("writeEmp")
+	public String writeEmp(Emp emp, Model model) {
+		System.out.println("EmpController.writeEmp Start");
+		
+		// Service, Dao, Mapper명[insertEmp] 까지 insert
+		int insertResult = empService.insertEmp(emp);
+		if(insertResult > 0 ) return "redirect:listEmp";
+		else {
+			model.addAttribute("msg", "입력 실패 확인해 보세요");
+			return "forward:writeFormEmp";
+		}
+	}
+	
+	// Validation시 참조하세요
+	@PostMapping("writeEmp3")
+	public String writeEmp3(@ModelAttribute("emp") @Valid Emp emp, 
+								BindingResult result, Model model) {
+		System.out.println("EmpController.writeEmp3 Start");
+		
+		// Validation 오류 시 Result
+		if(result.hasErrors()) {
+			System.out.println("EmpController.writeEmp3 hassError");
+			model.addAttribute("msg", "BindingResult 입력 실패 확인해 주세요");
+			return "forward:writeFormEmp";
+		}
+		int insertResult = empService.insertEmp(emp);
+		if(insertResult > 0 ) return "redirect:listEmp";
+		else {
+			model.addAttribute("msg", "입력 실패 확인해 보세요");
+			return "forward:writeFormEmp";
+		}
+	}
+	
+	@GetMapping("confirm")
+	public String confirm(int empno, Model model) {
+		Emp emp = empService.detailEmp(empno);
+		model.addAttribute("empno", empno);
+		if(emp != null) {
+			System.out.println("EmpController.confirm 중복된 사번");
+			model.addAttribute("msg", "중복된 사번입니다.");
+			return "forward:writeFormEmp";
+			
+		}else {
+			System.out.println("EmpController.confirm 사용 가능한 사번");
+			model.addAttribute("msg", "사용 가능한 사번입니다.");
+			return "forward:writeFormEmp";
+
+		}
+	}
+	
+	@GetMapping("deleteEmp")
+	public String deleteEmp(int empno, Model model) {
+		System.out.println("EmpController.deleteEmp Start");
+		int result = empService.deleteEmp(empno);
+		
+		return "redirect:listEmp";
+		
+	}
+	
+	@GetMapping("listSearch3")
+	public String listSearch3(Emp emp, String currentPage, Model model) {
+		System.out.println("EmpController.listSearch3 Start");
+		// Emp 전체 Count
+		int totalEmp = empService.totalEmp();
+		
+		if(!emp.getKeyword().equals("")) {
+			totalEmp = empService.searchCount(emp);
+			System.out.println("EmpController.listSearch3 Keyword totalEmp -> " + totalEmp);
+			
+		}
+
+		System.out.println("EmpController.listSearch3 currentPage -> " + currentPage);
+		System.out.println("EmpController.listSearch3 totalEmp -> " + totalEmp);
+		// Paging 작업
+		Paging page = new Paging(totalEmp, currentPage);
+		// Paameter emp -> Page만 추가 Setting
+		emp.setStart(page.getStart());
+		emp.setEnd(page.getEnd());
+		System.out.println("EmpController.listSearch3 page.getStart() -> " + page.getStart() + " page.getEnd() -> " + page.getEnd());
+		List<Emp> listSearchEmp = empService.listSearchEmp(emp);
+		model.addAttribute("totalEmp",totalEmp);
+		model.addAttribute("listEmp",listSearchEmp);
+		model.addAttribute("page",page);
+		return "list";
 	}
 }

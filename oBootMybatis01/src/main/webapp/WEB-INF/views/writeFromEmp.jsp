@@ -1,21 +1,33 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ include file="header.jsp" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
 </head>
+<script type="text/javascript">
+	function chk(){
+		if(!frm.empno.value){
+			alert("사번을 입력한 후 확인하세요");
+			frm.empno.focus();
+			return false;
+		}else location.href="confirm?empno="+frm.empno.value;
+	}
+</script>
 <body>
 	<h2>직원 정보 입력</h2>
 	<c:if test="${msg != null}"> ${msg}</c:if>
-	<form action="writeEmp" method="post" name="frm">
+	<form:form action="writeEmp3" method="post" name="frm" modelAttribute="emp">
 		<table>
 			<tr><th>사번</th><td><input type="number" name="empno" required="required" maxlength="4" value="${empno}">
 				<input type="button" value="중복확인" onclick="chk()"></td></tr>
 			<tr><th>이름</th>
-				<td><input type="text" name="ename" required="required" ></td></tr>
+				<td><input type="text" name="ename">
+				<form:errors path="ename"/></td>
+			</tr>
 			<tr><th>업무</th>
 				<td><input type="text" name="job" required="required" ></td></tr>
 			<tr><th>급여</th>
@@ -39,6 +51,6 @@
 			<tr>
 				<td colspan="2"><input type="submit" value="확인"></td></tr>
 		</table>
-	</form>
+	</form:form>
 </body>
 </html>

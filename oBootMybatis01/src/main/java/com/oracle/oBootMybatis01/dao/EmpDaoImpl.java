@@ -77,11 +77,59 @@ public class EmpDaoImpl implements EmpDao {
 		System.out.println("EmpDaoImpl.listManager Start");
 		List<Emp> empList = null;
 		try {
-			empList = session.selectList("");
+			empList = session.selectList("tkSelectManager");
 		} catch (Exception e) {
 			System.out.println("EmpDaoImpl.updateEmp() e.getMessage() -> " + e.getMessage());
 		}
 		return empList;
+	}
+
+	@Override
+	public int insertEmp(Emp emp) {
+		System.out.println("EmpDaoImpl.insertEmp Start");
+		int insertResult = 0;
+		try {
+			insertResult = session.insert("tkInsertEmp", emp);
+		} catch (Exception e) {
+			System.out.println("EmpDaoImpl.insertEmp() e.getMessage() -> " + e.getMessage());
+		}
+		return insertResult;
+	}
+
+	@Override
+	public int deleteEmp(int empno) {
+		System.out.println("EmpDaoImpl.insertEmp Start");
+		int deleteResult = 0;
+		try {
+			deleteResult = session.delete("tkDeleteEmp", empno);
+		} catch (Exception e) {
+			System.out.println("EmpDaoImpl.insertEmp() e.getMessage() -> " + e.getMessage());
+		}
+		return deleteResult;
+	}
+
+	@Override
+	public List<Emp> empSearchList(Emp emp) {
+		System.out.println("EmpDaoImpl.empSearchList Start");
+		List<Emp> empSearchList = null;
+		try {
+			empSearchList = session.selectList("tkEmpSearchList", emp);
+		} catch (Exception e) {
+			System.out.println("EmpDaoImpl.empSearchList() e.getMessage() -> " + e.getMessage());
+		}
+		return empSearchList;
+	}
+
+	@Override
+	public int empSearchCount(Emp emp) {
+		System.out.println("EmpDaoImpl.empSearchCount Start");
+		List<Emp> empSearchList = null;
+		try {
+			empSearchList = session.selectList("tkEmpSearchCount", emp);
+		} catch (Exception e) {
+			System.out.println("EmpDaoImpl.empSearchCount() e.getMessage() -> " + e.getMessage());
+		}
+		return empSearchList.size();
 	}
 
 }
