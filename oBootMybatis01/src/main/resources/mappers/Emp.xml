@@ -6,4 +6,25 @@
 	<select id="empTotal" resultType="int">
 		SELECT COUNT(*) FROM emp
 	</select>
+	<select id="tkEmpListAll" parameterType="Emp" resultType="Emp">
+	<!-- configuration.xml에서 alias를 사용하지 않으면 Type에서 경로를 모두 작성해야 함
+	com.oracle.oBootMybatis01.model.Emp -> Emp로 변경-->
+		SELECT *
+		FROM 
+		(SELECT ROWNUM rn, a.* 
+      		FROM 
+      		(SELECT * FROM emp ORDER BY empno) a
+            )  
+WHERE rn BETWEEN #{start} AND #{end}
+	</select>
+	<select id="tkEmpSelOne" parameterType="int" resultType="Emp">
+		SELECT * FROM emp WHERE empno = #{empno}
+	</select>
+	<update id="tkEmpUpdate" parameterType="Emp">
+		UPDATE emp SET 
+			ename = #{ename}, job = #{job}, sal = #{sal}, hiredate = #{hiredate},
+			<if test="#{comm} != null"> comm = #{comm}, </if>
+			mgr = #{mgr}, deptno = #{deptno}
+		WHERE empno = #{empno}
+	</update>
 </mapper>
