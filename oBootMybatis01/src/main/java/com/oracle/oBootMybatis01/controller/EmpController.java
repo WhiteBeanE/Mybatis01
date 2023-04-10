@@ -24,6 +24,7 @@ import com.oracle.oBootMybatis01.model.Dept;
 import com.oracle.oBootMybatis01.model.DeptVO;
 import com.oracle.oBootMybatis01.model.Emp;
 import com.oracle.oBootMybatis01.model.EmpDept;
+import com.oracle.oBootMybatis01.model.Member1;
 import com.oracle.oBootMybatis01.service.EmpService;
 import com.oracle.oBootMybatis01.service.Paging;
 
@@ -307,5 +308,53 @@ public class EmpController {
 		model.addAttribute("deptList", deptList);
 		
 		return "writeDeptCursor";
+	}
+	
+	// interCeptor 시작 화면
+	@GetMapping("/interCeptorForm")
+	public String interCeptorForm(Model model) {
+		System.out.println("EmpController.interCeptorForm Start");
+		
+		return "interCeptorForm";
+	}
+	
+	// interCeptor Number 2
+	@GetMapping("/interCeptor")
+	public String interCeptor(String id, Model model) {
+		System.out.println("EmpController.interCeptor Start");
+		System.out.println("EmpController.interCeptor id -> " + id);
+		// 존재 : 1, 비존재 : 0
+		int memCnt = empService.memCount(id);
+		System.out.println("EmpController.interCeptor memCnt -> " + memCnt);
+		
+		model.addAttribute("id", id);
+		model.addAttribute("memCnt", memCnt);
+		
+		return "interCeptor";	// User 존재하면 User 이용 조회 Page
+	}
+	
+	// SampleInterceptor 내용을 받아 처리
+	@GetMapping("doMemberWrite")
+	public String doMemberWrite(Model model, HttpServletRequest request) {
+		System.out.println("EmpController.doMemberWrite Start");
+		String ID = (String)request.getSession().getAttribute("ID");
+		System.out.println("doMemberWrite 부터 하세요.");
+		model.addAttribute("id", ID);
+		
+		return "doMemberWrite";
+	}
+	// InterCeptor 진행 Test
+	@GetMapping("doMemberList")
+	public String doMemberList(Model model, HttpServletRequest request) {
+		System.out.println("EmpController.doMemberList Start");
+		String ID = (String)request.getSession().getAttribute("ID");
+		System.out.println("EmpController.doMemberList ID -> " + ID);
+		Member1 member1 = null;
+		// Member1 List Get Service
+		List<Member1> listMember = empService.listMember(member1);
+		model.addAttribute("id", ID);
+		model.addAttribute("listMember", listMember);
+		
+		return "doMemberList";	// User 존재하면 User 이용 조회 Page
 	}
 }

@@ -7,10 +7,12 @@ import org.springframework.stereotype.Service;
 
 import com.oracle.oBootMybatis01.dao.DeptDao;
 import com.oracle.oBootMybatis01.dao.EmpDao;
+import com.oracle.oBootMybatis01.dao.Member1Dao;
 import com.oracle.oBootMybatis01.model.Dept;
 import com.oracle.oBootMybatis01.model.DeptVO;
 import com.oracle.oBootMybatis01.model.Emp;
 import com.oracle.oBootMybatis01.model.EmpDept;
+import com.oracle.oBootMybatis01.model.Member1;
 
 import lombok.RequiredArgsConstructor;
 
@@ -19,6 +21,7 @@ import lombok.RequiredArgsConstructor;
 public class EmpServiceImpl implements EmpService {
 	private final EmpDao empDao;
 	private final DeptDao deptDao;
+	private final Member1Dao member1Dao;
 	
 	@Override
 	public int totalEmp() {
@@ -113,7 +116,22 @@ public class EmpServiceImpl implements EmpService {
 	@Override
 	public void selListDept(HashMap<String, Object> map) {
 		System.out.println("EmpServiceImpl.selListDept Start");
-		deptDao.selListDept(map);
+		deptDao.selListDept(map);	
+	}
+	@Override
+	public int memCount(String id) {
+		System.out.println("EmpServiceImpl.memCount Start");
+		int memCnt = member1Dao.memCount(id);
+		System.out.println("EmpServiceImpl.memCount memCnt -> " + memCnt);
+		
+		return memCnt;
+	}
+	@Override
+	public List<Member1> listMember(Member1 member1) {
+		System.out.println("EmpServiceImpl.listMember Start");
+		List<Member1> listMember = member1Dao.listMember(member1);
+		System.out.println("EmpServiceImpl.listMember listMember.size() -> " + listMember.size());
+		return listMember;
 	}
 
 }
