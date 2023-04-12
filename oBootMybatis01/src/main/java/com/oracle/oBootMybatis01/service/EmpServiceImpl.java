@@ -133,5 +133,15 @@ public class EmpServiceImpl implements EmpService {
 		System.out.println("EmpServiceImpl.listMember listMember.size() -> " + listMember.size());
 		return listMember;
 	}
+	@Override
+	public String deptName(int deptno) {
+		System.out.println("EmpServiceImpl.deptName Start");
+		return empDao.deptName(deptno);
+	}
+	@Override
+	public int empDelete(Emp emp) {
+		System.out.println("EmpServiceImpl.empDelete Start");
+		return empDao.empDelete(emp);
+	}
 
 }

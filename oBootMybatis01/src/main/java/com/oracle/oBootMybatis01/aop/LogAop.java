@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class LogAop {
 	
-	// aop3.buz 패키지 안에 있는 모든 메소드
+	// com.oracle.oBootMybatis01.dao 패키지 안에 있는 모든 메소드
 	@Pointcut("within(com.oracle.oBootMybatis01.dao.*)")
 	private void pointcutMethod() {}
 	
@@ -24,7 +24,7 @@ public class LogAop {
 		
 		Object obj;
 		try {
-			// 핵심 관심사 Method 수행 -> getStudentInfo / getWorkerInfo
+			// 핵심 관심사 Method 수행 -> /interCeptor
 			obj = joinPoint.proceed();
 			return obj;
 		} finally {

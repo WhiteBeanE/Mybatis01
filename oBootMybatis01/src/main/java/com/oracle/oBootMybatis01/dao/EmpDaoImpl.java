@@ -145,4 +145,30 @@ public class EmpDaoImpl implements EmpDao {
 		return listEmpDept;
 	}
 
+	@Override
+	public String deptName(int deptno) {
+		System.out.println("EmpDaoImpl.deptName Start");
+		String resultStr = null;
+		try {
+			resultStr = session.selectOne("DeptName", deptno);
+			System.out.println("EmpDaoImpl.deptName resultStr -> " + resultStr);
+		} catch (Exception e) {
+			System.out.println("EmpDaoImpl.deptName() e.getMessage() -> " + e.getMessage());
+		}
+		return resultStr;
+	}
+
+	@Override
+	public int empDelete(Emp emp) {
+		System.out.println("EmpDaoImpl.empDelete Start");
+		int result = 0;
+		try {
+			result = session.delete("EmpDelete", emp);
+			System.out.println("EmpDaoImpl.deptName result -> " + result);
+		} catch (Exception e) {
+			System.out.println("EmpDaoImpl.deptName() e.getMessage() -> " + e.getMessage());
+		}
+		return result;
+	}
+
 }

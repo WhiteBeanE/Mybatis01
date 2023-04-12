@@ -34,4 +34,8 @@
 			)
 		}
 	</select>
+	<select id="DeptName" parameterType="int" resultType="java.lang.String">
+		SELECT dname FROM dept WHERE deptno = #{deptno}
+	
+	</select>
 </mapper>

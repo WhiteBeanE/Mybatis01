@@ -11,6 +11,7 @@ import org.springframework.ui.Model;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import lombok.extern.slf4j.Slf4j;
@@ -72,4 +73,38 @@ public class UploadController {
 		FileCopyUtils.copy(fileData, target); // org.springframework.util.FileCopyUtils;
 		return savedName;
 	}
+	
+	@GetMapping("uploadFileDelete")
+	public String uploadFileDelete(@RequestParam("image") String image , HttpServletRequest request, Model model) {
+		String uploadPath = request.getSession().getServletContext().getRealPath("/upload/");
+		String deleteFile = uploadPath + image;
+		log.info("deleteFile -> " + deleteFile);
+		System.out.println("uploadFileDelete Start");
+		int delResult = upFilerDelete(deleteFile);
+		log.info("deleteFile result -> " + delResult);
+		model.addAttribute("deleteFile", deleteFile);
+		model.addAttribute("delResult", delResult);
+		
+		return "uploadDelResult";
+	}
+
+	private int upFilerDelete(String deleteFile) {
+		int result = 0;
+		log.info("upFilerDelete result -> " + deleteFile);
+		File file = new File(deleteFile);
+		if(file.exists()) {
+			if(file.delete()) {
+				System.out.println("파일 삭제 성공");
+				result = 1;
+			}else {
+				System.out.println("파일 삭제 실패");
+				result = 0;
+			}	
+		}else {
+			System.out.println("파일이 존재하지 않습니다.");
+			result = -1;
+		}
+		return result;
+	}
+
 }

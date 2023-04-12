@@ -331,6 +331,7 @@ public class EmpController {
 		model.addAttribute("memCnt", memCnt);
 		
 		return "interCeptor";	// User 존재하면 User 이용 조회 Page
+		// 이건 안쓰긴 하는데 꼭 적어야함?
 	}
 	
 	// SampleInterceptor 내용을 받아 처리
@@ -357,4 +358,45 @@ public class EmpController {
 		
 		return "doMemberList";	// User 존재하면 User 이용 조회 Page
 	}
+	
+	@GetMapping("/ajaxForm")
+	public String ajaxForm(Model model) {
+		System.out.println("EmpController.ajaxForm Start");
+		
+		return "ajaxForm";
+	}
+	
+	@GetMapping("/listEmpAjaxForm")
+	public String listEmpAjaxForm(Model model) {
+		Emp emp = new Emp();
+		System.out.println("EmpController.listEmpAjaxForm Start");
+		// Parameter emp -> Page만 추가 Setting
+		emp.setStart(1);
+		emp.setEnd(10);
+		
+		List<Emp> listEmp = empService.listEmp(emp);
+		System.out.println("EmpController.listEmpAjaxForm lisEmp.size() -> " + listEmp.size());
+		model.addAttribute("resutl", "White");
+		model.addAttribute("listEmp", listEmp);
+		
+		return "listEmpAjaxForm";
+	}
+	
+	@GetMapping("/listEmpAjaxForm2")
+	public String listEmpAjaxForm2(Model model) {
+		Emp emp = new Emp();
+		System.out.println("EmpController.listEmpAjaxForm2 Start");
+		
+		// Parameter emp -> Page만 추가 Setting
+		emp.setStart(1);
+		emp.setEnd(5);
+		
+		List<Emp> listEmp = empService.listEmp(emp);
+		System.out.println("EmpController.listEmpAjaxForm lisEmp.size() -> " + listEmp.size());
+		model.addAttribute("listEmp", listEmp);
+		
+		return "listEmpAjaxForm2";
+	}
+	
+	
 }

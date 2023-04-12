@@ -81,4 +81,7 @@
 			</otherwise>
 		</choose>
 	</select>
+	<delete id="EmpDelete" parameterType="Emp">
+		DELETE FROM emp WHERE empno = #{empno} AND ename = #{ename}
+	</delete>
 </mapper>

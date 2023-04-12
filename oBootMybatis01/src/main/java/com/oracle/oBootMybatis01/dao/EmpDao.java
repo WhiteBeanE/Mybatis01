@@ -16,4 +16,6 @@ public interface EmpDao {
 	List<Emp> empSearchList(Emp emp);
 	int empSearchCount(Emp emp);
 	List<EmpDept> listEmpDept();
+	String deptName(int deptno);
+	int empDelete(Emp emp);
 }
